@@ -602,12 +602,29 @@ body::after,
 .bg-image { z-index: -3; }         /* OK, resta sotto */
 .bg-gradient { z-index: -2; }       /* OK */
 body::after, .bg-blob { z-index: -1; } /* OK, ma sopra il gradiente */
-    
+    /* Stato iniziale neutro */
+
+
+/* Quando l'immagine è valida */
+body.bg-loaded .bg-image {
+  opacity: 1;
+}
+
+/* FALLBACK se immagine assente */
+body.bg-fallback {
+  background: radial-gradient(
+    circle at 20% 30%,
+    #1a1a24 0%,
+    #0f0f14 60%,
+    #0a0a0d 100%
+  );
+}
   </style>
 </head>
 <body>
   <div class="bg-gradient"></div>
   <div class="bg-image"></div>
+  <div class="bg-blob"></div>
   <div class="splash">
     <div class="splash-content">
       <h1 class="splash-title">Aum Ensemble</h1>
