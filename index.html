@@ -11,61 +11,69 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
   <style>
-    /* reset & base (identico a prima, ma aggiungiamo stili per il popup) */
+    /* reset & base */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: transparent;
-  display: flex;
-  align-items: flex-start;   /* allinea in alto, evita il rimbalzo verticale */
-  justify-content: center;
-  padding: 2rem 1.5rem;
-  position: relative;
-  line-height: 1.6;
-  color: #eaeaea;
-}
+    html, body {
+      height: 100vh;
+      margin: 0;
+      overscroll-behavior: none;
+      overflow: hidden;
+    }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-background: radial-gradient(circle at 30% 40%, #2a2a2a 0%, #0f0f0f 90%);
-	z-index: -2;
-}
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: transparent;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      line-height: 1.6;
+      color: #eaeaea;
+    }
 
-body::after {
-  content: '';
-  position: fixed;
-  top: -20vh;
-  right: -10vw;
-  width: 60vmax;
-  height: 60vmax;
-  background: rgba(90, 90, 110, 0.1); /* meno opaco */
-  border-radius: 50%;
-  filter: blur(120px);
-  z-index: -1;
-  animation: slowDrift 28s infinite alternate ease-in-out;
-}
+    /* Sfondo fisso (già ok) */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 30% 40%, #2a2a2a 0%, #0f0f0f 90%);
+      z-index: -2;
+    }
 
-.bg-blob {
-  position: fixed;
-  bottom: -15vh;
-  left: -5vw;
-  width: 70vmin;
-  height: 70vmin;
-  background: rgba(70, 70, 90, 0.08); /* meno opaco */
-  border-radius: 50%;
-  filter: blur(100px);
-  z-index: -1;
-  animation: slowDrift2 22s infinite alternate;
-  
-}
-	@keyframes slowDrift {
+    body::after {
+      content: '';
+      position: fixed;
+      top: -20vh;
+      right: -10vw;
+      width: 60vmax;
+      height: 60vmax;
+      background: rgba(90, 90, 110, 0.1);
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      animation: slowDrift 28s infinite alternate ease-in-out;
+    }
+
+    .bg-blob {
+      position: fixed;
+      bottom: -15vh;
+      left: -5vw;
+      width: 70vmin;
+      height: 70vmin;
+      background: rgba(70, 70, 90, 0.08);
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      animation: slowDrift2 22s infinite alternate;
+    }
+
+    @keyframes slowDrift {
       0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
       100% { transform: translate(8%, 6%) scale(1.2); opacity: 0.8; }
     }
@@ -73,36 +81,42 @@ body::after {
       0% { transform: translate(0, 0) scale(1.1); opacity: 0.4; }
       100% { transform: translate(-6%, -8%) scale(1.3); opacity: 0.7; }
     }
-	
-body::before, body::after, .bg-blob {
-  filter: grayscale(0.5); /* regola da 0 a 1 */
-}
 
-    /* main container (identico) */
+    body::before, body::after, .bg-blob {
+      filter: grayscale(0.5);
+    }
 
-.story-container {
-  max-width: 1000px;
-  width: 100%;
-  height: 100%;              /* occupa tutto il body */
-  background: rgba(18, 18, 22, 0.6);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border-radius: 3rem;
-    padding: 1.5rem 1rem;   /* riduce il padding generale del contenitore */
-	box-shadow: ...;           /* mantieni le ombre */
-  border: ...;               /* mantieni i bordi */
-  animation: fadeRise 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+    /* Contenitore principale – inizialmente nascosto */
+    .story-container {
+      max-width: 1000px;
+      width: 100%;
+      height: 100%;
+      background: rgba(18, 18, 22, 0.6);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      border-radius: 3rem;
+      padding: 1.5rem 1rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
 
-  /* abilita lo scroll interno fluido */
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+      /* Nascondi inizialmente */
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Versione visibile (attivata da JS) */
+    .story-container.visible {
+      opacity: 1;
+      pointer-events: auto;
+      animation: fadeRise 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+    }
 
     @keyframes fadeRise {
       0% { opacity: 0; transform: translateY(30px) scale(0.98); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    /* Titoli e testo */
     h1, h2 {
       font-weight: 500;
       letter-spacing: -0.02em;
@@ -157,10 +171,6 @@ body::before, body::after, .bg-blob {
       font-size: 1.1rem;
     }
 
-    .story-card p:last-child {
-      margin-bottom: 0;
-    }
-
     .members-title {
       display: flex;
       align-items: center;
@@ -201,7 +211,7 @@ body::before, body::after, .bg-blob {
       flex-direction: column;
       align-items: center;
       text-align: center;
-      cursor: pointer; /* Indica che è cliccabile */
+      cursor: pointer;
     }
 
     .member-card:nth-child(1) { --i: 1; }
@@ -226,7 +236,6 @@ body::before, body::after, .bg-blob {
       border-radius: 50%;
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
       background-color: #2c2c34;
       margin-bottom: 1rem;
       box-shadow: 0 8px 15px #0000004d, 0 0 0 1px #3f3f4f inset;
@@ -248,7 +257,6 @@ body::before, body::after, .bg-blob {
       font-size: 0.95rem;
       font-weight: 300;
       color: #afb5cc;
-      letter-spacing: 0.3px;
     }
 
     .band-footer {
@@ -261,7 +269,6 @@ body::before, body::after, .bg-blob {
       padding-top: 1.5rem;
       font-size: 1rem;
       backdrop-filter: blur(5px);
-      transition: 0.2s;
     }
 
     .band-footer i {
@@ -283,7 +290,7 @@ body::before, body::after, .bg-blob {
       font-size: 0.9rem;
     }
 
-    /* ---------------- POPUP MODALE ---------------- */
+    /* MODALE */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -312,7 +319,6 @@ body::before, body::after, .bg-blob {
       width: 90%;
       background: rgba(18, 18, 22, 0.8);
       backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
       border-radius: 2.5rem;
       padding: 2rem;
       box-shadow: 0 40px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(220, 220, 240, 0.1) inset;
@@ -334,10 +340,8 @@ body::before, body::after, .bg-blob {
       font-size: 1.8rem;
       color: #b0b0c0;
       cursor: pointer;
-      transition: color 0.2s;
       background: none;
       border: none;
-      line-height: 1;
     }
 
     .modal-close:hover {
@@ -367,7 +371,6 @@ body::before, body::after, .bg-blob {
       color: #afb5cc;
       text-align: center;
       margin-bottom: 1.8rem;
-      letter-spacing: 0.5px;
     }
 
     .modal-bio {
@@ -379,15 +382,107 @@ body::before, body::after, .bg-blob {
       padding-top: 1.5rem;
     }
 
-    .modal-bio p {
-      margin-bottom: 1rem;
+    /* NAVIGAZIONE */
+    nav ul {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      margin-bottom: 2.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(210, 210, 230, 0.2);
+      flex-wrap: wrap;
     }
 
-    .modal-bio p:last-child {
-      margin-bottom: 0;
+    nav a {
+      color: #b0b0c0;
+      text-decoration: none;
+      font-weight: 400;
+      padding: 0.5rem 0;
+      transition: color 0.2s, border-color 0.2s;
+      border-bottom: 2px solid transparent;
     }
 
+    nav a:hover {
+      color: #ffffff;
+    }
+
+    nav a.active {
+      color: #ffffff;
+      border-bottom-color: #a0a8d0;
+    }
+
+    .pages-container {
+      position: relative;
+    }
+
+    .page {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .page.active {
+      display: block;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    /* VIDEO */
+    .video-card {
+      padding-bottom: 1.5rem;
+    }
+
+    .video-title {
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+      color: #f0f0fa;
+      border-left: 3px solid rgba(160, 168, 208, 0.5);
+      padding-left: 1rem;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 15px 30px -10px #00000080;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* MEDIA QUERY PER MOBILE */
     @media (max-width: 550px) {
+      .story-container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+
+      .video-title {
+        font-size: 1.1rem;
+        padding-left: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .story-card {
+        padding: 1.2rem 0.8rem;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
       .modal-content {
         padding: 1.5rem;
       }
@@ -399,370 +494,130 @@ body::before, body::after, .bg-blob {
         font-size: 1.6rem;
       }
     }
-	/* Stile per il nav */
-nav ul {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  list-style: none;
-  margin-bottom: 2.5rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(210, 210, 230, 0.2);
-  flex-wrap: wrap;
-}
 
-nav a {
-  color: #b0b0c0;
-  text-decoration: none;
-  font-weight: 400;
-  padding: 0.5rem 0;
-  transition: color 0.2s, border-color 0.2s;
-  border-bottom: 2px solid transparent;
-}
+    /* ACCELERAZIONE GPU (opzionale) */
+    .bg-blob, .story-container {
+      will-change: transform;
+      transform: translateZ(0);
+    }
 
-nav a:hover {
-  color: #ffffff;
-}
+    /* ELIMINA EVIDENZIAZIONE TAP */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
 
-nav a.active {
-  color: #ffffff;
-  border-bottom-color: #a0a8d0;
-}
+    a:focus, button:focus, .member-card:focus {
+      outline: none;
+    }
 
-pages-container {
-  position: relative;
-  /* rimuovi min-height, si adatterà al contenuto */
-}
-	  		
-.page {
-  display: none;              /* Nasconde completamente la pagina */
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
+    /* SPLASH SCREEN */
+    .splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      pointer-events: none;
+      animation: fadeOutSplash 1s ease-in-out 1s forwards;
+    }
 
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
+    .splash-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
 
-.page.active {
-  display: block;
-  animation: fadeIn 0.4s ease forwards;
-}
+    .splash-title {
+      font-size: clamp(3rem, 15vw, 6rem);
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
 
-/* Assicura che i membri siano visibili solo nella home */
-#home .member-grid {
-  display: flex; /* o come definito */
-  
-  
-}
+    .splash-year {
+      font-size: clamp(1.2rem, 5vw, 2rem);
+      font-weight: 300;
+      opacity: 0.9;
+      letter-spacing: 3px;
+    }
 
-
-/* Stili per i video */
-.video-card {
-  padding-bottom: 1.5rem; /* Regola lo spazio interno */
-}
-
-.video-title {
-  font-size: 1.3rem;
-  font-weight: 400;
-  margin-bottom: 1.2rem;
-  color: #f0f0fa;
-  letter-spacing: 0.3px;
-  border-left: 3px solid rgba(160, 168, 208, 0.5);
-  padding-left: 1rem;
-}
-
-.video-container {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9; /* Mantiene le proporzioni del video */
-  border-radius: 1.5rem;
-  overflow: hidden;
-  box-shadow: 0 15px 30px -10px #00000080;
-}
-
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-/* Regole base di .storyContainer (SEMPRE attive) */
-.story-container {
-  max-width: 1000px;
-  width: 100%;
-  height: 100%;
-  background: rgba(18, 18, 22, 0.6);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border-radius: 3rem;
-  padding: 1.5rem 1rem;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-
-  /* Nascondi inizialmente - QUESTE SONO FONDAMENTALI */
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Versione visibile - da attivare con JavaScript */
-.story-container.visible {
-  opacity: 1;
-  pointer-events: auto;
-  animation: fadeRise 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-}
-
-/* Poi dopo, le media query */
-@media (max-width: 550px) {
-  .story-container {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
-  /* ... altre regole mobile ... */
-  /* Nuove regole per i video su mobile */
-  .video-title {
-    font-size: 1.1rem;    /* riduce il titolo */
-    padding-left: 0.8rem;
-    margin-bottom: 1rem;
-  }
-
-  .story-card {
-    padding: 1.2rem 0.8rem; /* diminuisce il padding laterale interno della card */
-    margin-left: 0;          /* eventuali margini laterali vengono azzerati */
-    margin-right: 0;
-  }
-		.story-container.visible {
-  opacity: 1;
-  pointer-events: auto;
-  animation: fadeRise 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-}
-}
-
-
-}
-html, body {
-  height: 100vh;             /* altezza viewport fissa, senza barra indirizzi */
-  margin: 0;
-  overscroll-behavior: none; /* elimina l'effetto rimbalzo */
-  overflow: hidden;          /* niente scroll sul body */
-}
-	
-.bg-gradient, .bg-blob, .story-container {
-  will-change: transform;
-  transform: translateZ(0); /* Forza layer GPU */
-}
-
-  
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Rimuove l'outline di focus per link e card (opzionale, ma migliora estetica) */
-a:focus,
-button:focus,
-.member-card:focus {
-  outline: none;
-}
-body::before, body::after, .bg-blob {
-  filter: grayscale(0.5); /* regola da 0 a 1 */
-}
-
-	  /* Splash screen */
-.splash {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent; /* Il background sarà lo stesso del sito */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  pointer-events: none; /* Permette di cliccare attraverso durante la dissolvenza */
-  animation: fadeOutSplash 1s ease-in-out 1s forwards;
-}
-
-.splash-content {
-  text-align: center;
-  color: white;
-  text-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-.splash-title {
-  font-size: clamp(3rem, 15vw, 6rem);
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-bottom: 0.5rem;
-  line-height: 1.2;
-}
-
-.splash-year {
-  font-size: clamp(1.2rem, 5vw, 2rem);
-  font-weight: 300;
-  opacity: 0.9;
-  letter-spacing: 3px;
-}
-
-@keyframes fadeOutSplash {
-  0% {
-    opacity: 1;
-    visibility: visible;
-  }
-  100% {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-	  
+    @keyframes fadeOutSplash {
+      0% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
   </style>
 </head>
-	<script>
-  // Mostra lo splash per 1 secondo, poi fade di 1 secondo,
-  // infine rendi visibile il contenuto principale.
-  setTimeout(() => {
-    const splash = document.querySelector('.splash');
-    if (splash) {
-      splash.remove(); // oppure aggiungi una classe per nasconderlo, ma meglio rimuoverlo
-    }
-    // Rendi visibile il contenitore principale
-    const container = document.querySelector('.story-container');
-    if (container) {
-      container.classList.add('visible');
-    }
-  }, 2000); // 1s di visualizzazione + 1s di fade (coincide con la durata dell'animazione fadeOutSplash)
-</script>
 <body>
-
-	<div class="splash">
-  <div class="splash-content">
-    <h1 class="splash-title">Aum Ensemble</h1>
-    <p class="splash-year">est. 2025</p>
+  <div class="splash">
+    <div class="splash-content">
+      <h1 class="splash-title">Aum Ensemble</h1>
+      <p class="splash-year">est. 2025</p>
+    </div>
   </div>
-</div>
+
   <div class="bg-blob"></div>
 
   <main class="story-container">
- <nav>
-  <ul>
-    <li><a href="javascript:void(0)" class="nav-link active" data-page="home">Home</a></li>
-    <!--<li><a href="javascript:void(0)" class="nav-link" data-page="bio">Bio</a></li>--> 
-    <li><a href="javascript:void(0)" class="nav-link" data-page="discography">Discografia</a></li>
-    <li><a href="javascript:void(0)" class="nav-link" data-page="playlists">Playlists</a></li>
-  </ul>
-</nav>
+    <nav>
+      <ul>
+        <li><a href="javascript:void(0)" class="nav-link active" data-page="home">Home</a></li>
+        <li><a href="javascript:void(0)" class="nav-link" data-page="discography">Discografia</a></li>
+        <li><a href="javascript:void(0)" class="nav-link" data-page="playlists">Playlists</a></li>
+      </ul>
+    </nav>
 
-    <!-- Contenitore delle pagine -->
     <div class="pages-container">
-      <!-- Pagina Home -->
+      <!-- Home -->
       <section class="page active" id="home">
         <h1>velvet echoes</h1>
         <div class="tagline">
           <i class="fa-solid fa-wave-square" style="margin-right: 8px;"></i> 
           dreamgaze from the underground · est. 2014
         </div>
-
         <div class="story-card">
-          <p>
-            <i class="fa-solid fa-quote-left" style="opacity: 0.5; margin-right: 6px;"></i>
-            In the hazy winter of 2014, four friends from different corners of the city found themselves sharing a damp rehearsal room in the outskirts. What started as casual improvisations soon turned into <span style="font-weight: 400; color: #ffffff;">Velvet Echoes</span> — a band built on textured guitars, whispering synths, and rhythms that feel like a slow exhale.
-          </p>
-          <p>
-            Their first EP, <em>"flicker"</em>, was recorded in a basement with a single microphone and a cracked interface. Yet it captured something raw: the quiet longing of nocturnal creatures. Over the years, they’ve released three albums, played tiny clubs and forgotten lofts, always keeping the music intimate, the melodies wrapped in reverb and soft distortion.
-          </p>
-          <p>
-            Today, they still write in the same cramped space — now with slightly better gear — and their story continues to unfold in minor chords and whispered harmonies.
-          </p>
-          <div class="micro-detail">
-            <i class="fa-regular fa-compass"></i> 3 albums · 2 eps · endless twilight
-          </div>
+          <p><i class="fa-solid fa-quote-left" style="opacity: 0.5; margin-right: 6px;"></i>In the hazy winter of 2014, four friends from different corners of the city found themselves sharing a damp rehearsal room in the outskirts. What started as casual improvisations soon turned into <span style="font-weight: 400; color: #ffffff;">Velvet Echoes</span> — a band built on textured guitars, whispering synths, and rhythms that feel like a slow exhale.</p>
+          <p>Their first EP, <em>"flicker"</em>, was recorded in a basement with a single microphone and a cracked interface. Yet it captured something raw: the quiet longing of nocturnal creatures. Over the years, they’ve released three albums, played tiny clubs and forgotten lofts, always keeping the music intimate, the melodies wrapped in reverb and soft distortion.</p>
+          <p>Today, they still write in the same cramped space — now with slightly better gear — and their story continues to unfold in minor chords and whispered harmonies.</p>
+          <div class="micro-detail"><i class="fa-regular fa-compass"></i> 3 albums · 2 eps · endless twilight</div>
         </div>
-
-        <!-- members (solo nella home) -->
-        <div class="members-title">
-          <i class="fa-regular fa-user"></i> 
-          <span>shadows & strings</span>
-        </div>
-
+        <div class="members-title"><i class="fa-regular fa-user"></i> <span>shadows & strings</span></div>
         <div class="member-grid">
-          <div class="member-card" data-member="mara">
-            <div class="avatar" id="avatar1"></div>
-            <div class="member-name">Mara J.</div>
-            <div class="member-role">vocals, guitar</div>
-          </div>
-          <div class="member-card" data-member="sol">
-            <div class="avatar" id="avatar2"></div>
-            <div class="member-name">Sol R.</div>
-            <div class="member-role">bass, synth</div>
-          </div>
-          <div class="member-card" data-member="eliot">
-            <div class="avatar" id="avatar3"></div>
-            <div class="member-name">Eliot W.</div>
-            <div class="member-role">guitar, noises</div>
-          </div>
+          <div class="member-card" data-member="mara"><div class="avatar" id="avatar1"></div><div class="member-name">Mara J.</div><div class="member-role">vocals, guitar</div></div>
+          <div class="member-card" data-member="sol"><div class="avatar" id="avatar2"></div><div class="member-name">Sol R.</div><div class="member-role">bass, synth</div></div>
+          <div class="member-card" data-member="eliot"><div class="avatar" id="avatar3"></div><div class="member-name">Eliot W.</div><div class="member-role">guitar, noises</div></div>
         </div>
-
-        <div class="band-footer">
-          <i class="fa-regular fa-star"></i> “we play for the ones who listen in the dark” 
-          <span> — from a late night session, 2023</span>
-        </div>
+        <div class="band-footer"><i class="fa-regular fa-star"></i> “we play for the ones who listen in the dark” <span> — from a late night session, 2023</span></div>
       </section>
 
-      <!-- Pagina Bio 
-      <section class="page" id="bio">
-        <h1>la nostra storia</h1>
-        <div class="tagline">dalle cantine ai sogni</div>
-        <div class="story-card">
-          <p>Qui puoi raccontare la biografia estesa della band, le influenze, i momenti importanti...</p>
-          <p>Altra parte della storia.</p>
-        </div>
-        <div class="band-footer">
-          <i class="fa-regular fa-star"></i> — bio footer —
-        </div>
-      </section>
-	  -->
-
-      <!-- Pagina Discografia -->
+      <!-- Discografia -->
       <section class="page" id="discography">
         <h1>discografia</h1>
         <div class="tagline">album, ep, singoli</div>
-        <div class="story-card">
-          <p><strong>2023</strong> – “flicker” (EP)</p>
-          <p><strong>2021</strong> – “endless twilight” (album)</p>
-          <p>... altri dischi.</p>
-        </div>
-        <div class="band-footer">
-          <i class="fa-regular fa-star"></i> — discografia —
-        </div>
+        <div class="story-card"><p><strong>2023</strong> – “flicker” (EP)</p><p><strong>2021</strong> – “endless twilight” (album)</p><p>... altri dischi.</p></div>
+        <div class="band-footer"><i class="fa-regular fa-star"></i> — discografia —</div>
       </section>
 
-      <!-- Pagina Playlists -->
+      <!-- Playlists -->
       <section class="page" id="playlists">
         <h1>playlists & video</h1>
-<div class="story-card video-card">
-    <h2 class="video-title">Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble</h2>
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/HRCTLhiWTus" 
-                title="Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                referrerpolicy="strict-origin-when-cross-origin" 
-                allowfullscreen>
-        </iframe>
-    </div>
-</div>
-		
-        <div class="band-footer">
-          <i class="fa-regular fa-star"></i> — playlist —
+        <div class="story-card video-card">
+          <h2 class="video-title">Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble</h2>
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/HRCTLhiWTus" title="Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
         </div>
+        <div class="band-footer"><i class="fa-regular fa-star"></i> — playlist —</div>
       </section>
-    </div> <!-- fine pages-container -->
+    </div>
   </main>
 
-  <!-- POPUP MODALE -->
+  <!-- MODALE -->
   <div class="modal-overlay" id="memberModal">
     <div class="modal-content">
       <button class="modal-close" id="modalClose">&times;</button>
@@ -772,6 +627,16 @@ body::before, body::after, .bg-blob {
       <div class="modal-bio" id="modalBio"></div>
     </div>
   </div>
+
+  <script>
+    // Splash screen: dopo 2 secondi rimuove lo splash e mostra il contenuto
+    setTimeout(() => {
+      const splash = document.querySelector('.splash');
+      if (splash) splash.remove();
+      const container = document.querySelector('.story-container');
+      if (container) container.classList.add('visible');
+    }, 2000);
+  </script>
 
   <script src="app.js"></script>
   <script src="articles.js"></script>
