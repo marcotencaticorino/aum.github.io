@@ -28,7 +28,34 @@ style.textContent = `
   #avatar3 { background-image: url('${avatarEliot}'); }
 `;
 document.head.appendChild(style);
+    function applyBackgroundWithFallback(backgroundBase64) {
+  const bgElement = document.querySelector('.bg-image');
+
+  // Se non esiste variabile o è vuota → fallback immediato
+  if (!backgroundBase64 || backgroundBase64.length < 50) {
+    console.warn("Background non valido → attivo fallback");
+    document.body.classList.add('bg-fallback');
+    return;
+  }
+
+  const testImage = new Image();
+
+  testImage.onload = function () {
+    console.log("Background caricato correttamente");
+    bgElement.style.backgroundImage = `url(${backgroundBase64})`;
+    document.body.classList.add('bg-loaded');
+  };
+
+  testImage.onerror = function () {
+    console.warn("Errore caricamento background → fallback attivo");
+    document.body.classList.add('bg-fallback');
+  };
+
+  testImage.src = backgroundBase64;
+}
+    applyBackgroundWithFallback(backgroundBase64);
 
 });
+
 
 
