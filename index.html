@@ -426,19 +426,19 @@ nav a.active {
 }
 
 .page {
+  display: none;              /* Nasconde completamente la pagina */
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  transition: opacity 0.4s ease;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .page.active {
-  opacity: 1;
-  visibility: visible;
-  position: relative;
+  display: block;
+  animation: fadeIn 0.4s ease forwards;
 }
 
 /* Assicura che i membri siano visibili solo nella home */
