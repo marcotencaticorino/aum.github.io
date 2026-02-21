@@ -503,7 +503,10 @@ html, body {
   height: 100%;              /* invece di min-height: 100vh */
   margin: 0;
 }
-
+.bg-gradient, .bg-blob, .story-container {
+  will-change: transform;
+  transform: translateZ(0); /* Forza layer GPU */
+}
   </style>
 </head>
 <body>
