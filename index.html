@@ -74,14 +74,28 @@
       animation: slowDrift2 22s infinite alternate;
     }
 
-    .bg-gradient {
+/* Livello immagine (base64) – il più profondo */
+.bg-image {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -3;
+  pointer-events: none;
+}
+
+/* Livello gradiente (sopra l'immagine) */
+.bg-gradient {
   position: fixed;
   inset: 0;
   background: radial-gradient(circle at 30% 40%, #2a2a2a 0%, #0f0f0f 90%);
   z-index: -2;
-  filter: grayscale(0.5); /* se vuoi mantenere la desaturazione */
-  pointer-events: none;    /* non interferisce con i click */
+  filter: grayscale(0.5);
+  pointer-events: none;
 }
+
+/* Mantieni body::after e .bg-blob con z-index -1 */
 
     @keyframes slowDrift {
       0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
@@ -572,6 +586,7 @@
 </head>
 <body>
   <div class="bg-gradient"></div>
+  <div class="bg-image"></div>
   <div class="splash">
     <div class="splash-content">
       <h1 class="splash-title">Aum Ensemble</h1>
