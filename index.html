@@ -37,7 +37,7 @@
       color: #eaeaea;
     }
 
-    /* Sfondo fisso (già ok) */
+    /* Sfondo fisso (già ok) 
     body::before {
       content: '';
       position: fixed;
@@ -45,6 +45,7 @@
       background: radial-gradient(circle at 30% 40%, #2a2a2a 0%, #0f0f0f 90%);
       z-index: -2;
     }
+    */
 
     body::after {
       content: '';
@@ -485,7 +486,9 @@
         padding-left: 0.8rem;
         margin-bottom: 3rem;
       }
-
+.band-footer:last-child {
+  margin-bottom: 2rem;
+}
       .story-card {
         padding: 1.2rem 0.8rem;
         margin-left: 0;
@@ -568,6 +571,7 @@
   </style>
 </head>
 <body>
+  <div class="bg-gradient"></div>
   <div class="splash">
     <div class="splash-content">
       <h1 class="splash-title">Aum Ensemble</h1>
