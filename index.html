@@ -83,6 +83,7 @@
   background-repeat: no-repeat;
   z-index: -3;
   pointer-events: none;
+  background-size: 100% 100%; 
 }
 
 /* Livello gradiente (sopra l'immagine) - molto più trasparente */
@@ -111,22 +112,28 @@
     }
 
     /* Contenitore principale – inizialmente nascosto */
-    .story-container {
-      max-width: 1000px;
-      width: 100%;
-      height: 100%;
-      background: rgba(18, 18, 22, 0.6);
-      backdrop-filter: blur(14px) saturate(160%);
-      -webkit-backdrop-filter: blur(14px) saturate(160%);
-      border-radius: 3rem;
-      padding: 1.5rem 1rem;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+/* Aggiungi/substituisci nel blocco di .story-container */
+.story-container {
+  max-width: 1000px;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 18, 22, 0.6);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-radius: 3rem;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
-      /* Nascondi inizialmente */
-      opacity: 0;
-      pointer-events: none;
-    }
+  /* Stacking context forzato */
+  isolation: isolate;              /* <-- NUOVO */
+  position: relative;              /* <-- GIA' PRESENTE? Se no, aggiungi */
+  z-index: 1;                      /* <-- NUOVO: positivo esplicito */
+
+  /* Nascondi inizialmente */
+  opacity: 0;
+  pointer-events: none;
+}
 
     /* Versione visibile (attivata da JS) */
     .story-container.visible {
@@ -582,6 +589,21 @@
   0% { opacity: 1; visibility: visible; }
   100% { opacity: 0; visibility: hidden; }
 }
+
+    /* Assicura che TUTTI gli elementi di sfondo stiano sotto */
+.bg-image,
+.bg-gradient,
+body::after,
+.bg-blob {
+  z-index: -1;                     /* <-- MODIFICA: tutti a -1 */
+  /* Mantieni le altre proprietà invariate */
+}
+
+/* Se vuoi mantenere una gerarchia, lascia .bg-image a -3, ma il contenuto a 1 */
+.bg-image { z-index: -3; }         /* OK, resta sotto */
+.bg-gradient { z-index: -2; }       /* OK */
+body::after, .bg-blob { z-index: -1; } /* OK, ma sopra il gradiente */
+    
   </style>
 </head>
 <body>
