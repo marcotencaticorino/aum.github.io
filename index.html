@@ -85,9 +85,14 @@
   pointer-events: none;
 }
 
-/* Livello gradiente (sopra l'immagine) */
+/* Livello gradiente (sopra l'immagine) - molto più trasparente */
 .bg-gradient {
-display:none;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(42,42,42,0.25) 0%, rgba(15,15,15,0.4) 90%);
+  z-index: -2;
+  filter: grayscale(0.3);   /* ridotto leggermente */
+  pointer-events: none;
 }
 
 /* Mantieni body::after e .bg-blob con z-index -1 */
@@ -589,7 +594,7 @@ display:none;
     </div>
   </div>
 
-  <div class="bg-blob"></div>
+  <!--<div class="bg-blob"></div>-->
 
   <main class="story-container">
     <nav>
