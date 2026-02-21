@@ -626,6 +626,15 @@ body.bg-fallback {
     #0a0a0d 100%
   );
 }
+    /* Transizione per il blur */
+.bg-image {
+  transition: filter 1s ease; /* Aggiungi questa linea alla definizione esistente */
+}
+
+/* Classe che attiva il blur */
+.bg-image.blurred {
+  filter: blur(20px); /* Regola il valore per ottenere l'effetto desiderato */
+}
   </style>
 </head>
 <body>
@@ -705,31 +714,32 @@ body.bg-fallback {
       <div class="modal-bio" id="modalBio"></div>
     </div>
   </div>
-
 <script>
-  // Attendi il caricamento completo del DOM
   document.addEventListener('DOMContentLoaded', function() {
     const splash = document.querySelector('.splash');
     const container = document.querySelector('.story-container');
+    const bgImage = document.querySelector('.bg-image');
 
-    // Mostra lo splash con una piccola transizione
+    // Mostra lo splash
     if (splash) {
       splash.classList.add('show');
     }
 
-    // Dopo 2 secondi (1s di visualizzazione + 1s di fade), nascondi e mostra il contenuto
     setTimeout(() => {
       if (splash) {
-        splash.classList.add('fade-out'); // avvia l'animazione di uscita
-        // Rimuovi lo splash dopo la fine dell'animazione (1s)
+        splash.classList.add('fade-out');
         setTimeout(() => {
           splash.remove();
-        }, 1000);
+        }, 2000);
       }
       if (container) {
         container.classList.add('visible');
       }
-    }, 3500); // 2 secondi totali
+      // Aggiunge il blur all'immagine di sfondo
+      if (bgImage) {
+        bgImage.classList.add('blurred');
+      }
+    }, 3500); // Tempo totale: 3.5 secondi
   });
 </script>
 
