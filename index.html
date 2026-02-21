@@ -392,68 +392,221 @@
         font-size: 1.6rem;
       }
     }
+	/* Stile per il nav */
+nav ul {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  margin-bottom: 2.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(210, 210, 230, 0.2);
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: #b0b0c0;
+  text-decoration: none;
+  font-weight: 400;
+  padding: 0.5rem 0;
+  transition: color 0.2s, border-color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+nav a:hover {
+  color: #ffffff;
+}
+
+nav a.active {
+  color: #ffffff;
+  border-bottom-color: #a0a8d0;
+}
+
+/* Contenitore pagine */
+.pages-container {
+  position: relative;
+  min-height: 300px; /* adatta all'altezza dei contenuti */
+}
+
+.page {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.page.active {
+  opacity: 1;
+  visibility: visible;
+  position: relative;
+}
+
+/* Assicura che i membri siano visibili solo nella home */
+#home .member-grid {
+  display: flex; /* o come definito */
+  
+  
+}
+
+
+/* Stili per i video */
+.video-card {
+  padding-bottom: 1.5rem; /* Regola lo spazio interno */
+}
+
+.video-title {
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 1.2rem;
+  color: #f0f0fa;
+  letter-spacing: 0.3px;
+  border-left: 3px solid rgba(160, 168, 208, 0.5);
+  padding-left: 1rem;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Mantiene le proporzioni del video */
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 15px 30px -10px #00000080;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+
   </style>
 </head>
 <body>
   <div class="bg-blob"></div>
 
   <main class="story-container">
-    <h1>velvet echoes</h1>
-    <div class="tagline">
-      <i class="fa-solid fa-wave-square" style="margin-right: 8px;"></i> 
-      dreamgaze from the underground · est. 2014
-    </div>
+ <nav>
+  <ul>
+    <li><a href="javascript:void(0)" class="nav-link active" data-page="home">Home</a></li>
+    <!--<li><a href="javascript:void(0)" class="nav-link" data-page="bio">Bio</a></li>--> 
+    <li><a href="javascript:void(0)" class="nav-link" data-page="discography">Discografia</a></li>
+    <li><a href="javascript:void(0)" class="nav-link" data-page="playlists">Playlists</a></li>
+  </ul>
+</nav>
 
-    <div class="story-card">
-      <p>
-        <i class="fa-solid fa-quote-left" style="opacity: 0.5; margin-right: 6px;"></i>
-        In the hazy winter of 2014, four friends from different corners of the city found themselves sharing a damp rehearsal room in the outskirts. What started as casual improvisations soon turned into <span style="font-weight: 400; color: #ffffff;">Velvet Echoes</span> — a band built on textured guitars, whispering synths, and rhythms that feel like a slow exhale.
-      </p>
-      <p>
-        Their first EP, <em>"flicker"</em>, was recorded in a basement with a single microphone and a cracked interface. Yet it captured something raw: the quiet longing of nocturnal creatures. Over the years, they’ve released three albums, played tiny clubs and forgotten lofts, always keeping the music intimate, the melodies wrapped in reverb and soft distortion.
-      </p>
-      <p>
-        Today, they still write in the same cramped space — now with slightly better gear — and their story continues to unfold in minor chords and whispered harmonies.
-      </p>
-      <div class="micro-detail">
-        <i class="fa-regular fa-compass"></i> 3 albums · 2 eps · endless twilight
-      </div>
-    </div>
+    <!-- Contenitore delle pagine -->
+    <div class="pages-container">
+      <!-- Pagina Home -->
+      <section class="page active" id="home">
+        <h1>velvet echoes</h1>
+        <div class="tagline">
+          <i class="fa-solid fa-wave-square" style="margin-right: 8px;"></i> 
+          dreamgaze from the underground · est. 2014
+        </div>
 
-    <!-- members (3 artisti) -->
-    <div class="members-title">
-      <i class="fa-regular fa-user"></i> 
-      <span>shadows & strings</span>
-    </div>
+        <div class="story-card">
+          <p>
+            <i class="fa-solid fa-quote-left" style="opacity: 0.5; margin-right: 6px;"></i>
+            In the hazy winter of 2014, four friends from different corners of the city found themselves sharing a damp rehearsal room in the outskirts. What started as casual improvisations soon turned into <span style="font-weight: 400; color: #ffffff;">Velvet Echoes</span> — a band built on textured guitars, whispering synths, and rhythms that feel like a slow exhale.
+          </p>
+          <p>
+            Their first EP, <em>"flicker"</em>, was recorded in a basement with a single microphone and a cracked interface. Yet it captured something raw: the quiet longing of nocturnal creatures. Over the years, they’ve released three albums, played tiny clubs and forgotten lofts, always keeping the music intimate, the melodies wrapped in reverb and soft distortion.
+          </p>
+          <p>
+            Today, they still write in the same cramped space — now with slightly better gear — and their story continues to unfold in minor chords and whispered harmonies.
+          </p>
+          <div class="micro-detail">
+            <i class="fa-regular fa-compass"></i> 3 albums · 2 eps · endless twilight
+          </div>
+        </div>
 
-    <div class="member-grid">
-      <!-- member 1: Mara -->
-      <div class="member-card" data-member="mara">
-        <div class="avatar" id="avatar1"></div>
-        <div class="member-name">Mara J.</div>
-        <div class="member-role">vocals, guitar</div>
-      </div>
-      <!-- member 2: Sol -->
-      <div class="member-card" data-member="sol">
-        <div class="avatar" id="avatar2"></div>
-        <div class="member-name">Sol R.</div>
-        <div class="member-role">bass, synth</div>
-      </div>
-      <!-- member 3: Eliot -->
-      <div class="member-card" data-member="eliot">
-        <div class="avatar" id="avatar3"></div>
-        <div class="member-name">Eliot W.</div>
-        <div class="member-role">guitar, noises</div>
-      </div>
-    </div>
+        <!-- members (solo nella home) -->
+        <div class="members-title">
+          <i class="fa-regular fa-user"></i> 
+          <span>shadows & strings</span>
+        </div>
 
-    <div class="band-footer">
-      <i class="fa-regular fa-star"></i> “we play for the ones who listen in the dark” 
-      <span> — from a late night session, 2023</span>
-    </div>
+        <div class="member-grid">
+          <div class="member-card" data-member="mara">
+            <div class="avatar" id="avatar1"></div>
+            <div class="member-name">Mara J.</div>
+            <div class="member-role">vocals, guitar</div>
+          </div>
+          <div class="member-card" data-member="sol">
+            <div class="avatar" id="avatar2"></div>
+            <div class="member-name">Sol R.</div>
+            <div class="member-role">bass, synth</div>
+          </div>
+          <div class="member-card" data-member="eliot">
+            <div class="avatar" id="avatar3"></div>
+            <div class="member-name">Eliot W.</div>
+            <div class="member-role">guitar, noises</div>
+          </div>
+        </div>
+
+        <div class="band-footer">
+          <i class="fa-regular fa-star"></i> “we play for the ones who listen in the dark” 
+          <span> — from a late night session, 2023</span>
+        </div>
+      </section>
+
+      <!-- Pagina Bio 
+      <section class="page" id="bio">
+        <h1>la nostra storia</h1>
+        <div class="tagline">dalle cantine ai sogni</div>
+        <div class="story-card">
+          <p>Qui puoi raccontare la biografia estesa della band, le influenze, i momenti importanti...</p>
+          <p>Altra parte della storia.</p>
+        </div>
+        <div class="band-footer">
+          <i class="fa-regular fa-star"></i> — bio footer —
+        </div>
+      </section>
+	  -->
+
+      <!-- Pagina Discografia -->
+      <section class="page" id="discography">
+        <h1>discografia</h1>
+        <div class="tagline">album, ep, singoli</div>
+        <div class="story-card">
+          <p><strong>2023</strong> – “flicker” (EP)</p>
+          <p><strong>2021</strong> – “endless twilight” (album)</p>
+          <p>... altri dischi.</p>
+        </div>
+        <div class="band-footer">
+          <i class="fa-regular fa-star"></i> — discografia —
+        </div>
+      </section>
+
+      <!-- Pagina Playlists -->
+      <section class="page" id="playlists">
+        <h1>playlists & video</h1>
+		  <div class="story-card video-card">
+    <h2 class="video-title">Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble</h2>
+	<div class="video-container">
+               <iframe src="https://www.youtube.com/watch?v=HRCTLhiWTus"
+              title="YouTube video player" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen>
+      </iframe>
+        </div>
+		</div>
+        <div class="band-footer">
+          <i class="fa-regular fa-star"></i> — playlist —
+        </div>
+      </section>
+    </div> <!-- fine pages-container -->
   </main>
 
-  <!-- POPUP MODALE (inizialmente nascosto) -->
+  <!-- POPUP MODALE -->
   <div class="modal-overlay" id="memberModal">
     <div class="modal-content">
       <button class="modal-close" id="modalClose">&times;</button>
@@ -466,5 +619,6 @@
 
   <script src="app.js"></script>
   <script src="articles.js"></script>
+  <script src="router.js"></script>
 </body>
 </html>
