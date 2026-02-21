@@ -17,43 +17,25 @@ const avatarEliot = "data:image/jpeg;base64, /9j/4AAQSkZJRgABAQEBLAEsAAD/4RpERXh
 // (mantieni invariate le definizioni delle variabili)
 
     // Crea un foglio di stile dinamico con tutte le regole CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        /* Sfondo principale del body */
-        body {
-            background-image: url('${backgroundBase64}');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-color: transparent;
-        }
+ const style = document.createElement('style');
+style.textContent = `
+  /* Immagine di sfondo (primo livello) */
+  .bg-image {
+    background-image: url('${backgroundBase64}');
+  }
 
-        /* Gradiente sovrapposto con la stessa immagine (via pseudo-elemento) */
-        body::before {
-            background: radial-gradient(circle at 30% 40%, rgba(42,42,42,0.8) 0%, rgba(15,15,15,0.9) 90%),
-                        url('${backgroundBase64}') center / cover no-repeat !important;
-            background-blend-mode: overlay !important;
-        }
+  /* Blob animato (opzionale) */
+  .bg-blob {
+    background: url('${blobBackgroundBase64}') center/cover no-repeat, rgba(80,80,100,0.12);
+    background-blend-mode: overlay;
+  }
 
-        /* Blob animato con immagine opzionale */
-        .bg-blob {
-            background: url('${blobBackgroundBase64}') center/cover no-repeat, rgba(80,80,100,0.12);
-            background-blend-mode: overlay;
-        }
-
-        /* Avatar dei membri */
-        #avatar1 {
-            background-image: url('${avatarMara}');
-        }
-        #avatar2 {
-            background-image: url('${avatarSol}');
-        }
-        #avatar3 {
-            background-image: url('${avatarEliot}');
-        }
-    `;
-
-    // Aggiunge il foglio di stile al documento
-    document.head.appendChild(style);
+  /* Avatar membri */
+  #avatar1 { background-image: url('${avatarMara}'); }
+  #avatar2 { background-image: url('${avatarSol}'); }
+  #avatar3 { background-image: url('${avatarEliot}'); }
+`;
+document.head.appendChild(style);
 
 });
+
