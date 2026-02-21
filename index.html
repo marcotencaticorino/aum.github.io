@@ -21,11 +21,10 @@
 body {
   font-family: 'Inter', sans-serif;
   background-color: transparent;
-  min-height: 100vh;
   display: flex;
-  align-items: center;   /* flex-start */
+  align-items: flex-start;   /* allinea in alto, evita il rimbalzo verticale */
   justify-content: center;
-  padding: 2rem 1.5rem;      /* aumentato leggermente il padding superiore */
+  padding: 2rem 1.5rem;
   position: relative;
   line-height: 1.6;
   color: #eaeaea;
@@ -493,6 +492,11 @@ nav a.active {
   }
 
 
+}
+
+html, body {
+  height: 100%;              /* invece di min-height: 100vh */
+  margin: 0;
 }
 
   </style>
