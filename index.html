@@ -484,7 +484,20 @@ nav a.active {
   height: 100%;
   border: none;
 }
+@media (max-width: 550px) {
+  /* ... regole esistenti per modale ... */
 
+  /* Nuove regole per i video su mobile */
+  .video-title {
+    font-size: 1.1rem;    /* riduce il titolo */
+    padding-left: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .video-card {
+    padding: 1.2rem 1rem; /* riduce il padding interno della card */
+  }
+}
 
   </style>
 </head>
@@ -590,9 +603,7 @@ nav a.active {
         <h1>playlists & video</h1>
 		  <div class="story-card video-card">
     <h2 class="video-title">Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble</h2>
-	<div class="video-container">
-              <iframe width="774" height="435" src="https://www.youtube.com/embed/HRCTLhiWTus" title="Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-			  </iframe>
+<iframe width="774" height="435" src="https://www.youtube.com/embed/HRCTLhiWTus" title="Dhikr for a Wedding - Kinan Azmeh, arr. AuM Ensemble" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
       </iframe>
         </div>
 		</div>
