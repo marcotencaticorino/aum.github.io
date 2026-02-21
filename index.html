@@ -548,10 +548,14 @@
       letter-spacing: 3px;
     }
 
-    @keyframes fadeOutSplash {
-      0% { opacity: 1; visibility: visible; }
-      100% { opacity: 0; visibility: hidden; }
-    }
+.splash.fade-out {
+  animation: fadeOutSplash 1s ease-in-out forwards;
+}
+
+@keyframes fadeOutSplash {
+  0% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; }
+}
   </style>
 </head>
 <body>
@@ -629,15 +633,32 @@
     </div>
   </div>
 
-  <script>
-    // Splash screen: dopo 2 secondi rimuove lo splash e mostra il contenuto
+<script>
+  // Attendi il caricamento completo del DOM
+  document.addEventListener('DOMContentLoaded', function() {
+    const splash = document.querySelector('.splash');
+    const container = document.querySelector('.story-container');
+
+    // Mostra lo splash con una piccola transizione
+    if (splash) {
+      splash.classList.add('show');
+    }
+
+    // Dopo 2 secondi (1s di visualizzazione + 1s di fade), nascondi e mostra il contenuto
     setTimeout(() => {
-      const splash = document.querySelector('.splash');
-      if (splash) splash.remove();
-      const container = document.querySelector('.story-container');
-      if (container) container.classList.add('visible');
-    }, 2000);
-  </script>
+      if (splash) {
+        splash.classList.add('fade-out'); // avvia l'animazione di uscita
+        // Rimuovi lo splash dopo la fine dell'animazione (1s)
+        setTimeout(() => {
+          splash.remove();
+        }, 1000);
+      }
+      if (container) {
+        container.classList.add('visible');
+      }
+    }, 2000); // 2 secondi totali
+  });
+</script>
 
   <script src="app.js"></script>
   <script src="articles.js"></script>
