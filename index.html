@@ -716,32 +716,26 @@ body.bg-fallback {
     </div>
   </div>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const splash = document.querySelector('.splash');
-    const container = document.querySelector('.story-container');
-    const bgImage = document.querySelector('.bg-image');
+document.addEventListener('DOMContentLoaded', function() {
+  const splash = document.querySelector('.splash');
+  const container = document.querySelector('.story-container');
 
-    // Mostra lo splash
+  if (splash) {
+    splash.classList.add('show');
+  }
+
+  setTimeout(() => {
     if (splash) {
-      splash.classList.add('show');
+      splash.classList.add('fade-out');
+      setTimeout(() => {
+        splash.remove();
+      }, 1000);
     }
-
-    setTimeout(() => {
-      if (splash) {
-        splash.classList.add('fade-out');
-        setTimeout(() => {
-          splash.remove();
-        }, 2000);
-      }
-      if (container) {
-        container.classList.add('visible');
-      }
-      // Aggiunge il blur all'immagine di sfondo
-      if (bgImage) {
-        bgImage.classList.add('blurred');
-      }
-    }, 3500); // Tempo totale: 3.5 secondi
-  });
+    if (container) {
+      container.classList.add('visible');
+    }
+  }, 3500);
+});
 </script>
 
   <script src="app.js"></script>
