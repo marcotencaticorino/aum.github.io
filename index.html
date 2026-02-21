@@ -543,10 +543,73 @@ body::before, body::after, .bg-blob {
   filter: grayscale(0.5); /* regola da 0 a 1 */
 }
 
+	  /* Splash screen */
+.splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent; /* Il background sarà lo stesso del sito */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  pointer-events: none; /* Permette di cliccare attraverso durante la dissolvenza */
+  animation: fadeOutSplash 1s ease-in-out 1s forwards;
+}
+
+.splash-content {
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.splash-title {
+  font-size: clamp(3rem, 15vw, 6rem);
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.splash-year {
+  font-size: clamp(1.2rem, 5vw, 2rem);
+  font-weight: 300;
+  opacity: 0.9;
+  letter-spacing: 3px;
+}
+
+@keyframes fadeOutSplash {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
 	  
   </style>
 </head>
+	<script>
+  // Rimuove lo splash screen dopo l'animazione (opzionale)
+  setTimeout(() => {
+    const splash = document.querySelector('.splash');
+    if (splash) {
+      splash.remove();
+    }
+  }, 2000); // 1s di animazione + 1s di attesa
+</script>
 <body>
+
+	<div class="splash">
+  <div class="splash-content">
+    <h1 class="splash-title">Aum Ensemble</h1>
+    <p class="splash-year">est. 2025</p>
+  </div>
+</div>
   <div class="bg-blob"></div>
 
   <main class="story-container">
