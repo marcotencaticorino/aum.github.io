@@ -846,8 +846,46 @@ body.bg-fallback {
       <section class="page" id="contacts">
   <h1>Book us for event!</h1>
   <div class="booking">
-    <button class="booking-btn" id="openBookingModal">book us</button>
+
+  <!-- MODALE PRENOTAZIONE -->
+<div class="story-card" id="bookingModal">
+  <div class="modal-content booking-modal">
+    <button class="modal-close" id="closeBookingModal">&times;</button>
+    <h2 style="font-size: 2rem; margin-bottom: 1rem; text-align: center;">📅 Book the ensemble</h2>
+    <form id="bookingForm">
+      <div class="form-group">
+        <label for="name">Nome *</label>
+        <input type="text" id="name" name="name" required placeholder="Il tuo nome">
+      </div>
+      <div class="form-group">
+        <label for="surname">Cognome</label>
+        <input type="text" id="surname" name="surname" placeholder="Facoltativo">
+      </div>
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="tuo@email.com">
+        </div>
+        <div class="form-group half">
+          <label for="phone">Telefono</label>
+          <input type="tel" id="phone" name="phone" placeholder="+39 ...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="date">Data evento *</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label for="notes">Note / richieste speciali</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Scrivi qui…"></textarea>
+      </div>
+      <div class="form-footer">
+        <button type="submit" class="submit-btn">Invia richiesta <i class="fa-regular fa-paper-plane"></i></button>
+      </div>
+    </form>
   </div>
+ </div>
+</div>
 
       
                 <h1>Contacts</h1>
@@ -910,45 +948,6 @@ body.bg-fallback {
       <div class="modal-bio" id="modalBio"></div>
     </div>
   </div>
-
-  <!-- MODALE PRENOTAZIONE -->
-<div class="modal-overlay" id="bookingModal">
-  <div class="modal-content booking-modal">
-    <button class="modal-close" id="closeBookingModal">&times;</button>
-    <h2 style="font-size: 2rem; margin-bottom: 1rem; text-align: center;">📅 Book the ensemble</h2>
-    <form id="bookingForm">
-      <div class="form-group">
-        <label for="name">Nome *</label>
-        <input type="text" id="name" name="name" required placeholder="Il tuo nome">
-      </div>
-      <div class="form-group">
-        <label for="surname">Cognome</label>
-        <input type="text" id="surname" name="surname" placeholder="Facoltativo">
-      </div>
-      <div class="form-row">
-        <div class="form-group half">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="tuo@email.com">
-        </div>
-        <div class="form-group half">
-          <label for="phone">Telefono</label>
-          <input type="tel" id="phone" name="phone" placeholder="+39 ...">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="date">Data evento *</label>
-        <input type="date" id="date" name="date" required>
-      </div>
-      <div class="form-group">
-        <label for="notes">Note / richieste speciali</label>
-        <textarea id="notes" name="notes" rows="3" placeholder="Scrivi qui…"></textarea>
-      </div>
-      <div class="form-footer">
-        <button type="submit" class="submit-btn">Invia richiesta <i class="fa-regular fa-paper-plane"></i></button>
-      </div>
-    </form>
-  </div>
-</div>
 
 <!-- TOAST DI CONFERMA (inizialmente nascosto) -->
 <div id="confirmationToast" class="toast-message">🎉 Richiesta inviata! Grazie.</div>
@@ -1024,8 +1023,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Recupera email destinatario dalla card
-    const recipient = document.getElementById('contactEmail')?.innerText.trim() || 'mailmail@gmail.com';
-
+    //const recipient = document.getElementById('contactEmail')?.innerText.trim() || 'mailmail@gmail.com';
+const recipient = 'luca.tencati.corino@gmail.com';  // fisso
     // Costruisce oggetto email
     const subject = `Richiesta di ingaggio da ${name} ${surname}`;
     let body = `Nome: ${name}\n`;
