@@ -850,25 +850,24 @@ body.bg-fallback {
   <!-- MODALE PRENOTAZIONE -->
 <div class="story-card" id="bookingModal">
   <div class="modal-content booking-modal">
-    <button class="modal-close" id="closeBookingModal">&times;</button>
-    <h2 style="font-size: 2rem; margin-bottom: 1rem; text-align: center;">📅 Book the ensemble</h2>
+    <h2 style="font-size: 2rem; margin-bottom: 1rem; text-align: center;">Book the ensemble</h2>
     <form id="bookingForm">
       <div class="form-group">
-        <label for="name">Nome *</label>
-        <input type="text" id="name" name="name" required placeholder="Il tuo nome">
+        <label for="name">First name *</label>
+        <input type="text" id="name" name="name" required placeholder="First name">
       </div>
       <div class="form-group">
-        <label for="surname">Cognome</label>
-        <input type="text" id="surname" name="surname" placeholder="Facoltativo">
+        <label for="surname">Last name</label>
+        <input type="text" id="surname" name="surname" placeholder="Last name (optional)">
       </div>
       <div class="form-row">
         <div class="form-group half">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="tuo@email.com">
+          <input type="email" id="email" name="email" placeholder="Your mail">
         </div>
         <div class="form-group half">
-          <label for="phone">Telefono</label>
-          <input type="tel" id="phone" name="phone" placeholder="+39 ...">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" placeholder="Your hone">
         </div>
       </div>
       <div class="form-group">
@@ -876,11 +875,11 @@ body.bg-fallback {
         <input type="date" id="date" name="date" required>
       </div>
       <div class="form-group">
-        <label for="notes">Note / richieste speciali</label>
-        <textarea id="notes" name="notes" rows="3" placeholder="Scrivi qui…"></textarea>
+        <label for="notes">Special Requests</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Write something..."></textarea>
       </div>
       <div class="form-footer">
-        <button type="submit" class="submit-btn">Invia richiesta <i class="fa-regular fa-paper-plane"></i></button>
+        <button type="submit" class="submit-btn">Send booking request! <i class="fa-regular fa-paper-plane"></i></button>
       </div>
     </form>
   </div>
@@ -950,7 +949,7 @@ body.bg-fallback {
   </div>
 
 <!-- TOAST DI CONFERMA (inizialmente nascosto) -->
-<div id="confirmationToast" class="toast-message">🎉 Richiesta inviata! Grazie.</div>
+<div id="confirmationToast" class="toast-message">Booking Request sent! thank you!</div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const splash = document.querySelector('.splash');
@@ -975,26 +974,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Gestione modale prenotazione
 document.addEventListener('DOMContentLoaded', function() {
-  const bookingModal = document.getElementById('bookingModal');
-  const openBtn = document.getElementById('openBookingModal');
-  const closeBtn = document.getElementById('closeBookingModal');
   const bookingForm = document.getElementById('bookingForm');
   const toast = document.getElementById('confirmationToast');
 
-  // Apri modale
-  openBtn.addEventListener('click', () => {
-    bookingModal.classList.add('active');
-  });
-
-  // Chiudi modale
-  const closeModal = () => {
-    bookingModal.classList.remove('active');
-    bookingForm.reset(); // reset campi
-  };
-  closeBtn.addEventListener('click', closeModal);
-  window.addEventListener('click', (e) => {
-    if (e.target === bookingModal) closeModal();
-  });
+  // Eventuale reset manuale (se tieni il pulsante X)
+  const closeBtn = document.getElementById('closeBookingModal');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      bookingForm.reset();
+    });
+  }
 
   // Validazione e invio
   bookingForm.addEventListener('submit', function(e) {
@@ -1043,8 +1032,7 @@ const recipient = 'luca.tencati.corino@gmail.com';  // fisso
       toast.classList.remove('show');
     }, 3500);
 
-    // Chiude il modale
-    closeModal();
+
   });
 });
   
