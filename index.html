@@ -1038,33 +1038,42 @@ document.addEventListener('DOMContentLoaded', function() {
         dateInput.classList.remove('is-invalid');
       }
     }
-    // Campi email e phone (almeno uno valido)
-    else if (input === emailInput || input === phoneInput) {
-      const emailVal = emailInput.value.trim();
-      const phoneVal = phoneInput.value.trim();
-      const emailValid = isValidEmail(emailVal);
-      const phoneValid = isValidPhone(phoneVal);
+    // Campi email e phone (almeno uno valido)// Campi email e phone (almeno uno valido)
+else if (input === emailInput || input === phoneInput) {
+  const emailVal = emailInput.value.trim();
+  const phoneVal = phoneInput.value.trim();
+  const emailValid = isValidEmail(emailVal);
+  const phoneValid = isValidPhone(phoneVal);
 
-      // Determina lo stato del campo corrente
-      if (input === emailInput) {
-        if (emailVal === '') {
-          // Vuoto: neutro se l'altro è valido, altrimenti neutro (non obbligatorio)
-          emailInput.classList.remove('is-valid', 'is-invalid');
-        } else {
-          emailValid 
-            ? (emailInput.classList.add('is-valid'), emailInput.classList.remove('is-invalid'))
-            : (emailInput.classList.add('is-invalid'), emailInput.classList.remove('is-valid'));
-        }
-      } else if (input === phoneInput) {
-        if (phoneVal === '') {
-          phoneInput.classList.remove('is-valid', 'is-invalid');
-        } else {
-          phoneValid 
-            ? (phoneInput.classList.add('is-valid'), phoneInput.classList.remove('is-invalid'))
-            : (phoneInput.classList.add('is-invalid'), phoneInput.classList.remove('is-valid'));
-        }
-      }
+  const atLeastOneValid = emailValid || phoneValid;
+
+  // Se nessuno dei due è valido → entrambi rossi
+  if (!atLeastOneValid) {
+    emailInput.classList.add('is-invalid');
+    emailInput.classList.remove('is-valid');
+
+    phoneInput.classList.add('is-invalid');
+    phoneInput.classList.remove('is-valid');
+  } else {
+    // Email
+    if (emailVal !== '') {
+      emailValid
+        ? (emailInput.classList.add('is-valid'), emailInput.classList.remove('is-invalid'))
+        : (emailInput.classList.add('is-invalid'), emailInput.classList.remove('is-valid'));
+    } else {
+      emailInput.classList.remove('is-invalid', 'is-valid');
     }
+
+    // Phone
+    if (phoneVal !== '') {
+      phoneValid
+        ? (phoneInput.classList.add('is-valid'), phoneInput.classList.remove('is-invalid'))
+        : (phoneInput.classList.add('is-invalid'), phoneInput.classList.remove('is-valid'));
+    } else {
+      phoneInput.classList.remove('is-invalid', 'is-valid');
+    }
+  }
+}
     // Per cognome e note nessuna validazione
     else {
       resetValidationStyle(input);
@@ -1134,9 +1143,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Apre client di posta
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    // Toast
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3500);
 
     // Reset form
     bookingForm.reset();
