@@ -127,7 +127,7 @@
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border-radius: 3rem;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 2rem;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -190,7 +190,7 @@ clip-path: inset(0 round 3rem);
       -webkit-backdrop-filter: blur(8px);
       border-radius: 2rem;
       padding: 1.8rem 2rem;
-      margin: 2rem 0 2.8rem 2rem;
+      margin: 2rem 0 2.8rem 0;
       border: 1px solid rgba(230, 230, 250, 0.08);
       box-shadow: 0 20px 30px -15px rgba(0,0,0,0.8);
       transition: transform 0.25s ease, box-shadow 0.4s ease;
@@ -236,7 +236,7 @@ clip-path: inset(0 round 3rem);
       flex-wrap: wrap;
       gap: 1.5rem;
       justify-content: center;
-      margin-bottom: 2rem;
+  margin: 0 0 2rem 0;  /* allineato */
     }
 
     .member-card {
@@ -989,7 +989,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, 2000);
 });
-
 // Gestione form di prenotazione con validazione in tempo reale e colori
 document.addEventListener('DOMContentLoaded', function() {
   const bookingForm = document.getElementById('bookingForm');
@@ -1004,63 +1003,69 @@ document.addEventListener('DOMContentLoaded', function() {
   const dateInput = document.getElementById('date');
   const notesInput = document.getElementById('notes');
 
-  // Helper: rimuove classi di validazione da un input
+  // Helper: rimuove classi di validazione
   function resetValidationStyle(input) {
     input.classList.remove('is-valid', 'is-invalid');
+  }
+
+  // Validazione formato email
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  // Validazione formato telefono (almeno 8 cifre, può contenere +, spazi, trattini)
+  function isValidPhone(phone) {
+    return /^[+]?[0-9\s\-]{8,}$/.test(phone);
   }
 
   // Valida un singolo campo e applica la classe appropriata
   function validateField(input) {
     // Campo nome (obbligatorio)
     if (input === nameInput) {
-      if (nameInput.value.trim() === '') {
-        nameInput.classList.add('is-invalid');
-        nameInput.classList.remove('is-valid');
-      } else {
-        nameInput.classList.add('is-valid');
-        nameInput.classList.remove('is-invalid');
-      }
+      nameInput.value.trim() === '' 
+        ? (nameInput.classList.add('is-invalid'), nameInput.classList.remove('is-valid'))
+        : (nameInput.classList.add('is-valid'), nameInput.classList.remove('is-invalid'));
     }
     // Campo data (obbligatoria, futura)
     else if (input === dateInput) {
       const dateVal = dateInput.value;
-      if (!dateVal) {
+      const today = new Date().toISOString().split('T')[0];
+      if (!dateVal || dateVal < today) {
         dateInput.classList.add('is-invalid');
         dateInput.classList.remove('is-valid');
       } else {
-        const today = new Date().toISOString().split('T')[0];
-        if (dateVal < today) {
-          dateInput.classList.add('is-invalid');
-          dateInput.classList.remove('is-valid');
-        } else {
-          dateInput.classList.add('is-valid');
-          dateInput.classList.remove('is-invalid');
-        }
+        dateInput.classList.add('is-valid');
+        dateInput.classList.remove('is-invalid');
       }
     }
-    // Campi email e phone (almeno uno deve essere compilato)
+    // Campi email e phone (almeno uno valido)
     else if (input === emailInput || input === phoneInput) {
       const emailVal = emailInput.value.trim();
       const phoneVal = phoneInput.value.trim();
+      const emailValid = isValidEmail(emailVal);
+      const phoneValid = isValidPhone(phoneVal);
 
-      // Caso 1: entrambi vuoti → entrambi rossi
-      if (emailVal === '' && phoneVal === '') {
-        input.classList.add('is-invalid');
-        input.classList.remove('is-valid');
-      }
-      // Caso 2: almeno uno è compilato
-      else {
-        // Se questo campo è compilato → verde
-        if (input.value.trim() !== '') {
-          input.classList.add('is-valid');
-          input.classList.remove('is-invalid');
+      // Determina lo stato del campo corrente
+      if (input === emailInput) {
+        if (emailVal === '') {
+          // Vuoto: neutro se l'altro è valido, altrimenti neutro (non obbligatorio)
+          emailInput.classList.remove('is-valid', 'is-invalid');
         } else {
-          // Questo campo è vuoto ma l'altro è compilato → neutro
-          input.classList.remove('is-valid', 'is-invalid');
+          emailValid 
+            ? (emailInput.classList.add('is-valid'), emailInput.classList.remove('is-invalid'))
+            : (emailInput.classList.add('is-invalid'), emailInput.classList.remove('is-valid'));
+        }
+      } else if (input === phoneInput) {
+        if (phoneVal === '') {
+          phoneInput.classList.remove('is-valid', 'is-invalid');
+        } else {
+          phoneValid 
+            ? (phoneInput.classList.add('is-valid'), phoneInput.classList.remove('is-invalid'))
+            : (phoneInput.classList.add('is-invalid'), phoneInput.classList.remove('is-valid'));
         }
       }
     }
-    // Per cognome e note non applichiamo stili di validazione
+    // Per cognome e note nessuna validazione
     else {
       resetValidationStyle(input);
     }
@@ -1068,37 +1073,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Valida tutti i campi e restituisce true se il form è complessivamente valido
   function validateForm() {
-    // Applica validazione a ogni campo (aggiorna i colori)
+    // Aggiorna i colori di tutti i campi
     validateField(nameInput);
     validateField(dateInput);
-    validateField(surnameInput); // nessun effetto, ma chiamata per pulizia
     validateField(emailInput);
     validateField(phoneInput);
-    validateField(notesInput);   // nessun effetto
+    validateField(surnameInput); // pulisce eventuali residui
+    validateField(notesInput);   // pulisce eventuali residui
 
-    // Condizioni per l'abilitazione del pulsante
+    // Condizioni per abilitare il pulsante
     const nameOk = nameInput.value.trim() !== '';
     const dateOk = dateInput.value !== '' && dateInput.value >= new Date().toISOString().split('T')[0];
-    const contactOk = emailInput.value.trim() !== '' || phoneInput.value.trim() !== '';
+    const contactOk = isValidEmail(emailInput.value.trim()) || isValidPhone(phoneInput.value.trim());
 
     return nameOk && dateOk && contactOk;
   }
 
-  // Aggiorna lo stato del pulsante in base alla validità complessiva
+  // Aggiorna stato pulsante
   function updateButtonState() {
     submitBtn.disabled = !validateForm();
   }
 
-  // Pulisci form all'avvio e resetta gli stili
+  // Pulisci form all'avvio
   bookingForm.reset();
-  [nameInput, surnameInput, emailInput, phoneInput, dateInput, notesInput].forEach(input => {
-    resetValidationStyle(input);
-  });
-
-  // Forza un primo aggiornamento (dopo il reset i campi sono vuoti)
+  [nameInput, surnameInput, emailInput, phoneInput, dateInput, notesInput].forEach(resetValidationStyle);
   setTimeout(updateButtonState, 50);
 
-  // Aggiungi listener a tutti i campi che influenzano la validazione
+  // Listener su tutti i campi rilevanti
   [nameInput, dateInput, emailInput, phoneInput, surnameInput].forEach(input => {
     input.addEventListener('input', updateButtonState);
     input.addEventListener('change', updateButtonState);
@@ -1108,11 +1109,9 @@ document.addEventListener('DOMContentLoaded', function() {
   bookingForm.addEventListener('submit', function(e) {
     e.preventDefault();
     
-    if (!validateForm()) {
-      return; // non dovrebbe accadere perché il pulsante è disabilitato
-    }
+    if (!validateForm()) return;
 
-    // Recupera tutti i valori
+    // Raccogli dati
     const name = nameInput.value.trim();
     const surname = surnameInput.value.trim();
     const email = emailInput.value.trim();
@@ -1120,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const date = dateInput.value;
     const notes = notesInput.value.trim();
 
-    // Destinatario fisso (MODIFICA CON INDIRIZZO REALE)
+    // Destinatario (modifica se necessario)
     const recipient = 'luca.tencati.corino@gmail.com';
 
     // Costruzione email
@@ -1132,22 +1131,16 @@ document.addEventListener('DOMContentLoaded', function() {
     body += `Desired date: ${date}\n`;
     if (notes) body += `Notes: ${notes}\n`;
 
-    // Apre il client di posta
+    // Apre client di posta
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    // Mostra toast
+    // Toast
     toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3500);
+    setTimeout(() => toast.classList.remove('show'), 3500);
 
-    // Resetta il form
+    // Reset form
     bookingForm.reset();
-    // Rimuove le classi di validazione
-    [nameInput, surnameInput, emailInput, phoneInput, dateInput, notesInput].forEach(input => {
-      resetValidationStyle(input);
-    });
-    // Aggiorna stato pulsante (sarà disabilitato)
+    [nameInput, surnameInput, emailInput, phoneInput, dateInput, notesInput].forEach(resetValidationStyle);
     updateButtonState();
   });
 });
