@@ -969,21 +969,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, 2000);
 });
-
-  // Gestione modale prenotazione
+// Gestione form di prenotazione (e reset iniziale)
 document.addEventListener('DOMContentLoaded', function() {
   const bookingForm = document.getElementById('bookingForm');
   const toast = document.getElementById('confirmationToast');
 
-  // Eventuale reset manuale (se tieni il pulsante X)
-  const closeBtn = document.getElementById('closeBookingModal');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      bookingForm.reset();
-    });
+  // 1. Pulisci tutti i campi all'avvio (refresh o primo accesso)
+  if (bookingForm) {
+    bookingForm.reset();
   }
 
-  // Validazione e invio
+  // 2. Evento submit con validazioni (inclusa data non passata)
   bookingForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -995,7 +991,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const date = document.getElementById('date').value;
     const notes = document.getElementById('notes').value.trim();
 
-    // Validazione: almeno uno tra email e telefono
+    // Validazione campi obbligatori
     if (!name) {
       alert('Your Name is mandatory.');
       return;
@@ -1004,33 +1000,43 @@ document.addEventListener('DOMContentLoaded', function() {
       alert('Select the date.');
       return;
     }
+
+    // Validazione: almeno un recapito (email o telefono)
     if (!email && !phone) {
-      alert('insert at least one contact information (Mail or Phone).');
+      alert('Insert at least one contact information (Mail or Phone).');
       return;
     }
 
-    // Recupera email destinatario dalla card
-    //const recipient = document.getElementById('contactEmail')?.innerText.trim() || 'mailmail@gmail.com';
-const recipient = 'luca.tencati.corino@gmail.com';  // fisso
-    // Costruisce oggetto email
+    // Validazione: data non antecedente a oggi
+    const today = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
+    if (date < today) {
+      alert('The date cannot be in the past. Please select a future date.');
+      return;
+    }
+
+    // Destinatario fisso (modifica con l'email reale)
+    const recipient = 'luca.tencati.corino@gmail.com';  // <-- CAMBIA CON QUELLA VERA
+
+    // Costruzione oggetto email
     const subject = `Booking request from: ${name} ${surname}`;
     let body = `First Name: ${name}\n`;
     if (surname) body += `Last Name: ${surname}\n`;
     if (email) body += `Mail: ${email}\n`;
     if (phone) body += `Phone: ${phone}\n`;
-    body += `desired date: ${date}\n`;
+    body += `Desired date: ${date}\n`;
     if (notes) body += `Notes: ${notes}\n`;
 
-    // Apre il client di posta con i dati (mailto)
+    // Apre il client di posta
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     // Mostra toast di conferma
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3500);
+ //   toast.classList.add('show');
+ //   setTimeout(() => {
+ //     toast.classList.remove('show');
+  //  }, 3500);
 
-
+    // (Opzionale) resetta il form dopo l'invio
+    bookingForm.reset();
   });
 });
   
