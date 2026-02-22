@@ -129,13 +129,16 @@
   border-radius: 3rem;
   padding: 1.5rem 1rem;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
   /* Stacking context forzato */
   isolation: isolate;              /* <-- NUOVO */
   position: relative;              /* <-- GIA' PRESENTE? Se no, aggiungi */
-  z-index: 1;                      /* <-- NUOVO: positivo esplicito */
+  z-index: 1; 
+  /* <-- NUOVO: positivo esplicito */
+clip-path: inset(0 round 3rem);
 
   /* Nascondi inizialmente */
   opacity: 0;
