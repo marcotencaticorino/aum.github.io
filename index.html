@@ -968,6 +968,15 @@ body.bg-fallback {
 
 <!-- TOAST DI CONFERMA (inizialmente nascosto) -->
 <div id="confirmationToast" class="toast-message">Booking Request sent! thank you!</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("YOUR_PUBLIC_KEY"); // ← metti la tua public key
+  })();
+</script>
+
+  
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const splash = document.querySelector('.splash');
@@ -976,7 +985,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (splash) {
     splash.classList.add('show');
   }
-
   setTimeout(() => {
     if (splash) {
       splash.classList.add('fade-out');
@@ -1115,40 +1123,50 @@ else if (input === emailInput || input === phoneInput) {
   });
 
   // Gestione submit
-  bookingForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+bookingForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  if (!validateForm()) return;
 
-    // Raccogli dati
-    const name = nameInput.value.trim();
-    const surname = surnameInput.value.trim();
-    const email = emailInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const date = dateInput.value;
-    const notes = notesInput.value.trim();
+  submitBtn.disabled = true; // blocca doppio click
 
-    // Destinatario (modifica se necessario)
-    const recipient = 'luca.tencati.corino@gmail.com';
+  const name = nameInput.value.trim();
+  const surname = surnameInput.value.trim();
+  const email = emailInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const date = dateInput.value;
+  const notes = notesInput.value.trim();
 
-    // Costruzione email
-    const subject = `Booking request from: ${name} ${surname}`;
-    let body = `First Name: ${name}\n`;
-    if (surname) body += `Last Name: ${surname}\n`;
-    if (email) body += `Mail: ${email}\n`;
-    if (phone) body += `Phone: ${phone}\n`;
-    body += `Desired date: ${date}\n`;
-    if (notes) body += `Notes: ${notes}\n`;
+  const templateParams = {
+    name: name,
+    surname: surname,
+    email: email,
+    phone: phone,
+    date: date,
+    notes: notes
+  };
 
-    // Apre client di posta
-    window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  emailjs.send(
+    "YOUR_SERVICE_ID",   // ← service ID
+    "YOUR_TEMPLATE_ID",  // ← template ID
+    templateParams
+  )
+  .then(function(response) {
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
 
-
-    // Reset form
     bookingForm.reset();
-    [nameInput, surnameInput, emailInput, phoneInput, dateInput, notesInput].forEach(resetValidationStyle);
+    [nameInput, surnameInput, emailInput, phoneInput, dateInput, notesInput]
+      .forEach(resetValidationStyle);
+
     updateButtonState();
+    submitBtn.disabled = false;
+  })
+  .catch(function(error) {
+    alert("Something went wrong. Please contact us directly.");
+    submitBtn.disabled = false;
   });
+});
 });
 </script>
 
