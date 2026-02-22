@@ -849,7 +849,6 @@ body.bg-fallback {
 
   <!-- MODALE PRENOTAZIONE -->
 <div class="story-card" id="bookingModal">
-  <div class="modal-content booking-modal">
     <h2 style="font-size: 2rem; margin-bottom: 1rem; text-align: center;">Book the ensemble</h2>
     <form id="bookingForm">
       <div class="form-group">
@@ -867,7 +866,7 @@ body.bg-fallback {
         </div>
         <div class="form-group half">
           <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" placeholder="Your hone">
+          <input type="tel" id="phone" name="phone" placeholder="Your phone">
         </div>
       </div>
       <div class="form-group">
@@ -882,7 +881,6 @@ body.bg-fallback {
         <button type="submit" class="submit-btn">Send booking request! <i class="fa-regular fa-paper-plane"></i></button>
       </div>
     </form>
-  </div>
  </div>
 </div>
 
@@ -999,15 +997,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Validazione: almeno uno tra email e telefono
     if (!name) {
-      alert('Il nome è obbligatorio.');
+      alert('Your Name is mandatory.');
       return;
     }
     if (!date) {
-      alert('Seleziona una data.');
+      alert('Select the date.');
       return;
     }
     if (!email && !phone) {
-      alert('Inserisci almeno un recapito (email o telefono).');
+      alert('insert at least one contact information (Mail or Phone).');
       return;
     }
 
@@ -1015,13 +1013,13 @@ document.addEventListener('DOMContentLoaded', function() {
     //const recipient = document.getElementById('contactEmail')?.innerText.trim() || 'mailmail@gmail.com';
 const recipient = 'luca.tencati.corino@gmail.com';  // fisso
     // Costruisce oggetto email
-    const subject = `Richiesta di ingaggio da ${name} ${surname}`;
-    let body = `Nome: ${name}\n`;
-    if (surname) body += `Cognome: ${surname}\n`;
-    if (email) body += `Email: ${email}\n`;
-    if (phone) body += `Telefono: ${phone}\n`;
-    body += `Data desiderata: ${date}\n`;
-    if (notes) body += `Note: ${notes}\n`;
+    const subject = `Booking request from: ${name} ${surname}`;
+    let body = `First Name: ${name}\n`;
+    if (surname) body += `Last Name: ${surname}\n`;
+    if (email) body += `Mail: ${email}\n`;
+    if (phone) body += `Phone: ${phone}\n`;
+    body += `desired date: ${date}\n`;
+    if (notes) body += `Notes: ${notes}\n`;
 
     // Apre il client di posta con i dati (mailto)
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
