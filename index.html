@@ -793,6 +793,13 @@ body.bg-fallback {
     padding: 1.5rem;
   }
 }
+
+    .submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+    
   </style>
 </head>
 <body>
@@ -844,9 +851,7 @@ body.bg-fallback {
 
       <!-- Discografia -->
       <section class="page" id="contacts">
-  <h1>Book us for event!</h1>
   <div class="booking">
-
   <!-- MODALE PRENOTAZIONE -->
 <div class="story-card" id="bookingModal">
     <h2 style="font-size: 2rem; margin-bottom: 1rem; text-align: center;">Book the ensemble</h2>
@@ -862,7 +867,7 @@ body.bg-fallback {
       <div class="form-row">
         <div class="form-group half">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="Your mail">
+          <input type="email" id="email" name="email" placeholder="Your email">
         </div>
         <div class="form-group half">
           <label for="phone">Phone</label>
@@ -870,7 +875,7 @@ body.bg-fallback {
         </div>
       </div>
       <div class="form-group">
-        <label for="date">Data evento *</label>
+        <label for="date">Event date</label>
         <input type="date" id="date" name="date" required>
       </div>
       <div class="form-group">
@@ -970,52 +975,77 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 2000);
 });
 // Gestione form di prenotazione (e reset iniziale)
+// Gestione form di prenotazione con validazione in tempo reale
 document.addEventListener('DOMContentLoaded', function() {
   const bookingForm = document.getElementById('bookingForm');
   const toast = document.getElementById('confirmationToast');
+  const submitBtn = document.querySelector('.submit-btn');
+  const formError = document.getElementById('formError');
+  
+  // Campi da validare
+  const nameInput = document.getElementById('name');
+  const dateInput = document.getElementById('date');
+  const emailInput = document.getElementById('email');
+  const phoneInput = document.getElementById('phone');
 
-  // 1. Pulisci tutti i campi all'avvio (refresh o primo accesso)
-  if (bookingForm) {
-    bookingForm.reset();
+  // Funzione per validare il form
+  function validateForm() {
+    const name = nameInput.value.trim();
+    const date = dateInput.value;
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+    
+    // Check nome
+    if (!name) return false;
+    
+    // Check data
+    if (!date) return false;
+    const today = new Date().toISOString().split('T')[0];
+    if (date < today) return false;
+    
+    // Check almeno uno tra email e telefono
+    if (!email && !phone) return false;
+    
+    return true;
   }
 
-  // 2. Evento submit con validazioni (inclusa data non passata)
+  // Funzione per aggiornare stato pulsante e messaggio
+  function updateButtonState() {
+    const isValid = validateForm();
+    submitBtn.disabled = !isValid;
+    formError.style.display = isValid ? 'none' : 'block';
+  }
+
+  // Aggiungi listener a tutti i campi rilevanti
+  [nameInput, dateInput, emailInput, phoneInput].forEach(input => {
+    input.addEventListener('input', updateButtonState);
+    input.addEventListener('change', updateButtonState);
+  });
+
+  // Pulisci form all'avvio
+  bookingForm.reset();
+  // Forza un aggiornamento dopo il reset (alcuni browser mantengono valori)
+  setTimeout(updateButtonState, 100);
+
+  // Gestione submit
   bookingForm.addEventListener('submit', function(e) {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      // Non dovrebbe succedere perché il pulsante è disabilitato, ma per sicurezza
+      return;
+    }
 
-    // Recupera campi
-    const name = document.getElementById('name').value.trim();
+    // Recupera campi (già validati)
+    const name = nameInput.value.trim();
     const surname = document.getElementById('surname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const date = document.getElementById('date').value;
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const date = dateInput.value;
     const notes = document.getElementById('notes').value.trim();
 
-    // Validazione campi obbligatori
-    if (!name) {
-      alert('Your Name is mandatory.');
-      return;
-    }
-    if (!date) {
-      alert('Select the date.');
-      return;
-    }
-
-    // Validazione: almeno un recapito (email o telefono)
-    if (!email && !phone) {
-      alert('Insert at least one contact information (Mail or Phone).');
-      return;
-    }
-
-    // Validazione: data non antecedente a oggi
-    const today = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
-    if (date < today) {
-      alert('The date cannot be in the past. Please select a future date.');
-      return;
-    }
-
-    // Destinatario fisso (modifica con l'email reale)
-    const recipient = 'luca.tencati.corino@gmail.com';  // <-- CAMBIA CON QUELLA VERA
+    // Destinatario fisso
+    const recipient = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@gmail.com';  // CAMBIA CON QUELLA VERA
 
     // Costruzione oggetto email
     const subject = `Booking request from: ${name} ${surname}`;
@@ -1028,15 +1058,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Apre il client di posta
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
+/*
     // Mostra toast di conferma
- //   toast.classList.add('show');
- //   setTimeout(() => {
- //     toast.classList.remove('show');
-  //  }, 3500);
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500); */
 
-    // (Opzionale) resetta il form dopo l'invio
+    // Resetta form dopo invio
     bookingForm.reset();
+    // Aggiorna stato pulsante
+    setTimeout(updateButtonState, 50);
   });
 });
   
