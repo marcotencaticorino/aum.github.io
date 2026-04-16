@@ -3,24 +3,23 @@
 // Dati dei membri (storie dettagliate)
 const membersData = {
   mara: {
-    name: 'Mara J.',
-    role: 'vocals, guitar',
-    bio: `<p>Mara ha fondato la band nel 2014 dopo anni di esperienze soliste in caffè deserti. La sua voce eterea e i testi malinconici sono il cuore emotivo di Velvet Echoes. Influenzata da Mazzy Star e Slowdive, scrive canzoni che parlano di notti insonni e luci al neon.</p>
-          <p>Oltre alla musica, è appassionata di fotografia in bianco e nero e cura l'immagine visiva della band.</p>`,
+    name: 'Alberto Radossi',
+    role: 'Percussion, guitar',
+    bio: `<p>Alberto Radossi is an Italian percussionist based in The Hague. Active in orchestral, chamber, and experimental music, he performs across Europe, collaborating with ensembles and creating interdisciplinary projects that blend different types of arts. </p>
+          <p>He is particularly interested in experimental, folk, jazz, and improvisational music.</p>`,
     avatarId: 'avatar1'  // riferimento all'ID nell'HTML
   },
   sol: {
-    name: 'Sol R.',
-    role: 'bass, synth',
-    bio: `<p>Sol è il motore ritmico e la mente sperimentale. Cresciuto ascoltando krautrock e post-punk, ha trasformato il basso in una texture liquida. I suoi synth analogici aggiungono strati di calore distorsione.</p>
-          <p>Prima di unirsi alla band, costruiva pedali effetti nel suo garage. È anche un abile sound engineer e produce i dischi del gruppo.</p>`,
+    name: 'Daniele',
+    role: 'Trumpet',
+    bio: `<p>Born on April 26, 2002, he began his musical journey at the age of 8 in his local band, where his passion for music first took shape. He later studied at the “G. Rossini” Conservatory in Pesaro with A. Domizi, M. Fratini, and Federico Mondelci, refining his artistic voice through both formal studies and international masterclasses.</p>`,
     avatarId: 'avatar2'
   },
   eliot: {
-    name: 'Eliot W.',
-    role: 'guitar, noises',
-    bio: `<p>Eliot è il chitarrista silenzioso, capace di creare paesaggi sonori con loop e feedback. Autodidatta, ha imparato a suonare ascoltando dischi dei Sonic Youth e My Bloody Valentine.</p>
-          <p>Oltre alla chitarra, si occupa delle parti visive durante i concerti e colleziona vecchi registratori a nastro. La sua ricerca del suono "sporco ma intimo" definisce l'estetica della band.</p>`,
+    name: 'Marco Tencati Corino',
+    role: 'guitar',
+    bio: `<p>He has performed as a soloist in various concerts, standing out for his expressive playing and musical sensitivity. A dedicated chamber musician, he collaborates with different ensembles and projects.</p>
+          <p>After graduating with top honors, he is currently pursuing a Master’s degree at the Royal Conservatory of The Hague, continuing to develop his artistic path.</p>`,
     avatarId: 'avatar3'
   }
 };
